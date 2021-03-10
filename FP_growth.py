@@ -5,11 +5,12 @@ from itertools import chain, combinations
 from collections import defaultdict, OrderedDict
 from csv import reader
 import pandas as pd
+import os
 
 
 ######
 # Read data from CSV
-data = pd.read_csv ('G:/My Drive/Spring 2021/CSDS435/assignments/HW3/HW3codes/transaction.csv')
+data= open('G:/My Drive/Spring 2021/CSDS435/assignments/HW3/HW3codes/transaction.csv')
 print(data)
 min_sup_ratio = float (input ("What is minimum support ratio? "))
 min_conf = float (input ("What is minimum Confidence? "))
@@ -31,27 +32,19 @@ class Node:
             child.display (ind + 1)
 
 
-
 def getFromFile(data):
     itemSetList = []
-    f = []
-    frequency = [dict () for x in range (len (data.values[0]) + 1)]
+    frequency = []
 
-    for i in range (0, len (data)):
-        itemSetList.append ([str (data.values[i, j]) for j in range (0, len (data.values[0]))])
-
-    for i in itemSetList:
-        for j in i:
-            f.append (j)
-
-    for i in f:
-        # If item is present in dictionary, increment its count by 1
-        if i in frequency[1]:
-            frequency[1][i] = frequency[1][i] + 1
-
-    print("itemsets from file: \n", itemSetList)
+    #with open (data, 'r') as file:
+    csv_reader = reader (data)
+    for line in csv_reader:
+        line = list (filter (None, line))
+        itemSetList.append (line)
+        frequency.append (1)
+    print ("itemsets from file: \n", itemSetList)
+    print ("frequency from file: \n", frequency)
     return itemSetList, frequency
-
 
 def constructTree(itemSetList, frequency, min_sup):
     headerTable = defaultdict (int)
